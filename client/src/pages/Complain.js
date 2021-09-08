@@ -20,11 +20,16 @@ export default function Complain() {
 
     useEffect(() =>{
         socket = io('http://localhost:5000', {
-            // code here
+            auth: {
+                token: localStorage.getItem("token")
+            }
         })
         loadContact()
 
-        // code here
+        // listen error event sent from server if client doesn't pass middleware
+        socket.on("connect_error", (err) => {
+            console.error(err.message)
+        })
 
         return () => {
             socket.disconnect()

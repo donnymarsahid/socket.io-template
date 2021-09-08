@@ -20,11 +20,16 @@ export default function ComplainAdmin() {
 
     useEffect(() =>{
         socket = io('http://localhost:5000', {
-            // code here
+            auth: {
+                token: localStorage.getItem("token")
+            }
         })
         loadContacts()
 
-        // code here 
+        // listen error event sent from server if client doesn't pass middleware
+        socket.on("connection_error", (err) => {
+            console.log(err.message)
+        })
         
         return () => {
             socket.disconnect()
@@ -42,7 +47,7 @@ export default function ComplainAdmin() {
                 ...item,
                 message: "Click here to start message"
             }))
-
+            console.log(data)
             setContacts(dataContacts)
         })
     }
