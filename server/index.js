@@ -4,14 +4,22 @@ const express = require('express')
 
 const cors = require('cors')
 
-// import here
+// import lib
+const http = require('http')
+const {Server} = require('socket.io')
 
 // Get routes to the variabel
 const router = require('./src/routes')
 
 const app = express()
 
-// code here
+// initialize server
+const server = http.createServer(app)
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000'
+  }
+})
 
 const port = 5000
 
@@ -23,4 +31,4 @@ app.use('/api/v1/', router)
 app.use('/uploads', express.static('uploads'))
 
 // change app to server
-app.listen(port, () => console.log(`Listening on port ${port}!`))
+server.listen(port, () => console.log(`Listening on port ${port}!`))
